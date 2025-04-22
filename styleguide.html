@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -6,70 +7,58 @@
   <title>QRStudio Styleguide</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-white text-gray-800 p-6">
-  <div class="max-w-4xl mx-auto space-y-10">
-    <header class="flex justify-between items-center border-b pb-4">
-      <h1 class="text-3xl font-bold">QRStudio – Styleguide</h1>
-      <select id="lang-switch" class="border p-1 rounded text-sm">
-        <option value="de" selected>Deutsch</option>
-        <option value="en">English</option>
-      </select>
-    </header>
-
-    <section id="logo" class="space-y-2">
-      <h2 class="text-2xl font-semibold">Logo</h2>
-      <p class="text-gray-600">Das Logo sollte klar, mittig oder links oben platziert werden und auf hellen Hintergründen stehen.</p>
-      <img src="logo.png" alt="QRStudio Logo" class="w-40 mt-2" />
-    </section>
-
-    <section id="colors" class="space-y-2">
-      <h2 class="text-2xl font-semibold">Farben</h2>
-      <div class="grid grid-cols-3 sm:grid-cols-6 gap-4">
-        <div class="text-center">
-          <div class="w-10 h-10 mx-auto rounded-full bg-black"></div>
-          <p class="text-xs mt-1">#000000</p>
-        </div>
-        <div class="text-center">
-          <div class="w-10 h-10 mx-auto rounded-full bg-blue-600"></div>
-          <p class="text-xs mt-1">#2563EB</p>
-        </div>
-        <div class="text-center">
-          <div class="w-10 h-10 mx-auto rounded-full bg-red-500"></div>
-          <p class="text-xs mt-1">#EF4444</p>
-        </div>
-        <div class="text-center">
-          <div class="w-10 h-10 mx-auto rounded-full bg-green-500"></div>
-          <p class="text-xs mt-1">#22C55E</p>
-        </div>
-        <div class="text-center">
-          <div class="w-10 h-10 mx-auto rounded-full bg-yellow-400"></div>
-          <p class="text-xs mt-1">#FACC15</p>
-        </div>
-        <div class="text-center">
-          <div class="w-10 h-10 mx-auto rounded-full bg-purple-500"></div>
-          <p class="text-xs mt-1">#A855F7</p>
-        </div>
+<body class="bg-gray-100 text-gray-800 p-6">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">QRStudio Styleguide</h1>
+      <div>
+        <button onclick="switchLang('de')" class="px-3 py-1 border rounded mr-2">🇩🇪 Deutsch</button>
+        <button onclick="switchLang('en')" class="px-3 py-1 border rounded">🇬🇧 English</button>
       </div>
-    </section>
+    </div>
 
-    <section id="typography" class="space-y-2">
-      <h2 class="text-2xl font-semibold">Typografie</h2>
-      <p class="text-gray-600">Standard-Schrift: <strong>Tailwind Default (inter)</strong></p>
-      <p class="text-lg">Beispieltext: QR-Codes gestalten war noch nie so einfach.</p>
-    </section>
+    <div id="content-de" class="lang">
+      <h2 class="text-xl font-semibold mb-2">Farben</h2>
+      <p class="mb-4">QRStudio verwendet klare, moderne Farben. Hauptfarbe ist ein tiefes Blau (#2563eb), ergänzt durch Akzentfarben.</p>
+      <h2 class="text-xl font-semibold mb-2">Schriftart</h2>
+      <p class="mb-4">Die Hauptschrift ist eine moderne Sans-Serif-Schrift – optimiert für Web und Mobilgeräte.</p>
+      <h2 class="text-xl font-semibold mb-2">Logo-Nutzung</h2>
+      <ul class="list-disc pl-5 mb-4">
+        <li>Das Logo darf nicht verzerrt werden</li>
+        <li>Immer ausreichender Kontrast zum Hintergrund</li>
+        <li>In der QR-Mitte möglichst klar & sichtbar (weißes Padding empfohlen)</li>
+      </ul>
+      <h2 class="text-xl font-semibold mb-2">Dos & Don’ts</h2>
+      <ul class="list-disc pl-5 mb-4">
+        <li>✅ Dezent, modern und minimalistisch halten</li>
+        <li>❌ Keine grellen Farben oder überladene QR-Stile kombinieren</li>
+      </ul>
+    </div>
 
-    <section id="branding" class="space-y-2">
-      <h2 class="text-2xl font-semibold">Branding-Integration</h2>
-      <p class="text-gray-600">Empfohlen: dezentes „powered by QRStudio“ im Footer.</p>
-      <footer class="text-center text-sm text-gray-400 mt-4">powered by <span class="font-semibold text-gray-600">QRStudio</span></footer>
-    </section>
+    <div id="content-en" class="lang hidden">
+      <h2 class="text-xl font-semibold mb-2">Colors</h2>
+      <p class="mb-4">QRStudio uses clear, modern colors. The primary color is a deep blue (#2563eb), supported by accent tones.</p>
+      <h2 class="text-xl font-semibold mb-2">Font</h2>
+      <p class="mb-4">The main font is a modern sans-serif typeface – optimized for web and mobile readability.</p>
+      <h2 class="text-xl font-semibold mb-2">Logo Usage</h2>
+      <ul class="list-disc pl-5 mb-4">
+        <li>Never stretch or distort the logo</li>
+        <li>Ensure good contrast to background</li>
+        <li>In QR center: clear visibility, use white padding if needed</li>
+      </ul>
+      <h2 class="text-xl font-semibold mb-2">Dos & Don’ts</h2>
+      <ul class="list-disc pl-5 mb-4">
+        <li>✅ Keep it clean, modern and minimal</li>
+        <li>❌ Avoid flashy colors or overly complex QR shapes</li>
+      </ul>
+    </div>
   </div>
 
   <script>
-    const switcher = document.getElementById("lang-switch");
-    switcher.addEventListener("change", () => {
-      location.href = switcher.value === "en" ? "styleguide-en.html" : "styleguide.html";
-    });
+    function switchLang(lang) {
+      document.querySelectorAll(".lang").forEach(div => div.classList.add("hidden"));
+      document.getElementById("content-" + lang).classList.remove("hidden");
+    }
   </script>
 </body>
 </html>

@@ -38,8 +38,7 @@
         <div>
           <label class="block text-sm font-medium mb-1">Inhalt</label>
           <input id="qr-content" type="text" placeholder="z. B. https://deine-seite.de" class="w-full p-2 border rounded" />
-        <p id="hint" class="text-xs text-gray-500 mt-2">💡 Der Hinweis erscheint automatisch je nach Inhaltstyp.</p>
-
+          <p id="hint" class="text-xs text-gray-500 mt-2">💡 Der Hinweis erscheint automatisch je nach Inhaltstyp.</p>
         </div>
       </div>
     </div>
@@ -105,6 +104,24 @@
       }
     });
 
+    document.getElementById("qr-type").addEventListener("change", function () {
+      const hint = document.getElementById("hint");
+      const type = this.value;
+      switch (type) {
+        case 'text':
+          hint.textContent = "💬 Hinweis: Manche QR-Scanner suchen den Text im Internet anstatt ihn nur anzuzeigen.";
+          break;
+        case 'app':
+          hint.textContent = "📱 Bitte vollständigen App-Store-Link einfügen (z. B. https://...).";
+          break;
+        case 'event':
+          hint.textContent = "📅 Einige Kalender-Apps unterstützen Event-QR-Codes – bitte genaues Format verwenden.";
+          break;
+        default:
+          hint.textContent = "";
+      }
+    });
+
     function formatQRCodeContent(type, value) {
       const trimmed = value.trim();
       switch (type) {
@@ -137,7 +154,7 @@
       container.innerHTML = "";
 
       const tempDiv = document.createElement("div");
-tempDiv.style.display = "none";
+      tempDiv.style.display = "none";
       document.body.appendChild(tempDiv);
       new QRCode(tempDiv, {
         text: content,
@@ -161,6 +178,17 @@ tempDiv.style.display = "none";
           const size = Math.min(50, canvas.width * 0.25);
           const x = (canvas.width - size) / 2;
           const y = (canvas.height - size) / 2;
+
+          // Weißer Kreis als Hintergrund
+          const radius = size / 2;
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(x + radius, y + radius, radius + 4, 0, Math.PI * 2, true);
+          ctx.fillStyle = "#ffffff";
+          ctx.fill();
+          ctx.closePath();
+          ctx.restore();
+
           ctx.drawImage(uploadedLogo, x, y, size, size);
         }
 
@@ -169,26 +197,6 @@ tempDiv.style.display = "none";
         document.body.removeChild(tempDiv);
       }, 300);
     }
-
-    
-    document.getElementById("qr-type").addEventListener("change", function () {
-      const hint = document.getElementById("hint");
-      const type = this.value;
-      switch (type) {
-        case 'text':
-          hint.textContent = "💬 Hinweis: Manche QR-Scanner suchen den Text im Internet anstatt ihn nur anzuzeigen.";
-          break;
-        case 'app':
-          hint.textContent = "📱 Bitte vollständigen App-Store-Link einfügen (z. B. https://...).";
-          break;
-        case 'event':
-          hint.textContent = "📅 Einige Kalender-Apps unterstützen Event-QR-Codes – bitte genaues Format verwenden.";
-          break;
-        default:
-          hint.textContent = "";
-      }
-    });
-
 
     function downloadQRCode() {
       const canvas = document.querySelector("#qrcode canvas");

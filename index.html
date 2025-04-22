@@ -7,20 +7,17 @@
   <title>QRStudio</title>
   <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    .selected-ring {
-      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.2);
-    }
-  </style>
+  <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 p-6">
-  <header class="flex justify-center mt-1 mb-1">
-    <img src="logo.png" class="w-auto h-[80px] sm:h-[100px] md:h-[120px] lg:h-[140px]" />
+  <header class="flex justify-center mt-1 mb-6">
+    <img src="logo.png" class="w-auto h-[100px]" />
   </header>
+
   <div class="max-w-3xl mx-auto space-y-8">
+    <!-- Box 1 -->
     <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="text-xl font-semibold mb-4">Inhalt eingeben</h2>
+      <h2 class="text-xl font-semibold mb-4">1. Inhalt eingeben</h2>
       <div class="space-y-4">
         <div>
           <label class="block text-sm font-medium mb-1">Inhaltstyp</label>
@@ -36,34 +33,16 @@
           </select>
         </div>
         <div>
-          
-    <label class="block text-sm font-medium mb-1">Inhalt</label>
-
-    <div class="mt-4">
-      <label class="block text-sm font-medium mb-1">QR-Stil (Punkte)</label>
-      <select id="dot-style" class="w-full border rounded p-2">
-        <option value="square">🟥 Klassisch (eckig)</option>
-        <option value="dots">🔵 Rund (Premium)</option>
-        <option value="extra-rounded">🟣 Mikro-Dots</option>
-        <option value="classy">🔷 Kacheln / Diamanten</option>
-      </select>
-    </div>
-
-    <div class="mt-4">
-      <label class="block text-sm font-medium mb-1">Augenform (Ecken)</label>
-      <select id="corner-style" class="w-full border rounded p-2">
-        <option value="square">🟥 Klassisch</option>
-        <option value="dot">🔵 Rund</option>
-        <option value="extra-rounded">🟣 Extra weich</option>
-      </select>
-    </div>
-    
+          <label class="block text-sm font-medium mb-1">Inhalt</label>
           <input id="qr-content" type="text" placeholder="z. B. https://deine-seite.de" class="w-full p-2 border rounded" />
+          <p id="hint" class="text-xs text-gray-500 mt-2">💡 Der Hinweis erscheint automatisch je nach Inhaltstyp.</p>
         </div>
       </div>
     </div>
+
+    <!-- Box 2 -->
     <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="text-xl font-semibold mb-4">Stil wählen</h2>
+      <h2 class="text-xl font-semibold mb-4">2. Stil wählen</h2>
       <div class="mb-4">
         <label class="block text-sm font-medium mb-1">Farbe wählen</label>
         <div id="color-buttons" class="flex flex-wrap gap-2 mb-2">
@@ -77,28 +56,50 @@
         <input type="color" id="custom-color" onchange="setColor(this.value)" class="w-12 h-8 p-0 border rounded" />
       </div>
       <div class="mt-4">
+        <label class="block text-sm font-medium mb-1">QR-Stil (Punkte)</label>
+        <select id="dot-style" class="w-full border rounded p-2">
+          <option value="square">🟥 Klassisch (eckig)</option>
+          <option value="dots">🔵 Rund</option>
+          <option value="extra-rounded">🟣 Mikro-Dots</option>
+          <option value="classy">🔷 Kacheln / Diamanten</option>
+        </select>
+      </div>
+      <div class="mt-4">
+        <label class="block text-sm font-medium mb-1">Augenform (Ecken)</label>
+        <select id="corner-style" class="w-full border rounded p-2">
+          <option value="square">🟥 Klassisch</option>
+          <option value="dot">🔵 Rund</option>
+          <option value="extra-rounded">🟣 Extra weich</option>
+        </select>
+      </div>
+      <div class="mt-4">
         <label class="block text-sm font-medium mb-1">Logo hochladen</label>
         <input id="logo-upload" type="file" class="w-full border p-2 rounded" accept="image/*" />
         <p class="text-xs text-gray-500 mt-1">Dein Logo wird automatisch in der Mitte des QR-Codes eingefügt</p>
       </div>
     </div>
+
+    <!-- Box 3 -->
     <div class="bg-white rounded-2xl shadow p-6 text-center">
-      <h2 class="text-xl font-semibold mb-4">QR-Code Vorschau</h2>
+      <h2 class="text-xl font-semibold mb-4">3. QR-Code Vorschau</h2>
       <div id="qrcode" class="flex justify-center items-center p-4 bg-gray-200 rounded-lg mb-4"></div>
       <div class="flex justify-center gap-4">
-        <button onclick="generateQRCode()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">QR-Code generieren</button>
+        <button onclick="generateQRCode()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">QR-Code erstellen</button>
         <button onclick="downloadQRCode()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Download</button>
       </div>
     </div>
   </div>
+
   <footer class="text-center text-sm text-gray-400 mt-12">
     Powered by <span class="font-semibold text-gray-600">QRStudio</span>
     <br />
     <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a>
   </footer>
+
   <script>
     let currentColor = "#000000";
     let uploadedLogo = null;
+    let qrCode = null;
 
     function setColor(color, el = null) {
       currentColor = color;
@@ -112,15 +113,29 @@
 
     document.getElementById("logo-upload").addEventListener("change", function (e) {
       const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (evt) {
-          uploadedLogo = new Image();
-          uploadedLogo.src = evt.target.result;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        uploadedLogo = null;
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (evt) {
+        uploadedLogo = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("qr-type").addEventListener("change", function () {
+      const hint = document.getElementById("hint");
+      const type = this.value;
+      switch (type) {
+        case 'text':
+          hint.textContent = "💬 Hinweis: Manche QR-Scanner suchen den Text im Internet anstatt ihn nur anzuzeigen.";
+          break;
+        case 'app':
+          hint.textContent = "📱 Bitte vollständigen App-Store-Link einfügen (z. B. https://...).";
+          break;
+        case 'event':
+          hint.textContent = "📅 Einige Kalender-Apps unterstützen Event-QR-Codes – bitte genaues Format verwenden.";
+          break;
+        default:
+          hint.textContent = "";
       }
     });
 
@@ -148,117 +163,47 @@
       }
     }
 
-    
-<script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
-<script>
-let qrCode = null;
-let uploadedLogo = null;
-
-document.getElementById("logo-upload").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function (evt) {
-    uploadedLogo = evt.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-function generateQRCode() {
-  const type = document.getElementById("qr-type").value;
-  const rawContent = document.getElementById("qr-content").value;
-  const color = currentColor;
-  const dotType = document.getElementById("dot-style").value;
-  const cornerType = document.getElementById("corner-style").value;
-
-  const content = formatQRCodeContent(type, rawContent);
-  const container = document.getElementById("qrcode");
-  container.innerHTML = "";
-
-  qrCode = new QRCodeStyling({
-    width: 300,
-    height: 300,
-    type: "canvas",
-    data: content,
-    image: uploadedLogo || "",
-    dotsOptions: {
-      color: color,
-      type: dotType
-    },
-    cornersSquareOptions: {
-      type: cornerType
-    },
-    backgroundOptions: {
-      color: "#ffffff"
-    },
-    imageOptions: {
-      crossOrigin: "anonymous",
-      margin: 6,
-      imageSize: 0.3
-    }
-  });
-
-  qrCode.append(container);
-}
-
-function downloadQRCode() {
-  if (qrCode) {
-    qrCode.download({ name: "qrstudio-code", extension: "png" });
-  }
-}
-</script>
-
-
-function generateQRCode() {
+    function generateQRCode() {
       const type = document.getElementById("qr-type").value;
       const rawContent = document.getElementById("qr-content").value;
+      const color = currentColor;
+      const dotType = document.getElementById("dot-style").value;
+      const cornerType = document.getElementById("corner-style").value;
+
       const content = formatQRCodeContent(type, rawContent);
       const container = document.getElementById("qrcode");
       container.innerHTML = "";
 
-      const tempDiv = document.createElement("div");
-      document.body.appendChild(tempDiv);
-      new QRCode(tempDiv, {
-        text: content,
-        width: 200,
-        height: 200,
-        colorDark: currentColor,
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
+      qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "canvas",
+        data: content,
+        image: uploadedLogo || "",
+        dotsOptions: {
+          color: color,
+          type: dotType
+        },
+        cornersSquareOptions: {
+          type: cornerType
+        },
+        backgroundOptions: {
+          color: "#ffffff"
+        },
+        imageOptions: {
+          crossOrigin: "anonymous",
+          margin: 6,
+          imageSize: 0.3
+        }
       });
 
-      setTimeout(() => {
-        const tempCanvas = tempDiv.querySelector("canvas");
-        if (!tempCanvas) return;
-        const canvas = document.createElement("canvas");
-        canvas.width = 200;
-        canvas.height = 200;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(tempCanvas, 0, 0);
-
-        if (uploadedLogo && uploadedLogo.complete) {
-          const size = canvas.width * 0.25;
-          const x = (canvas.width - size) / 2;
-          const y = (canvas.height - size) / 2;
-          ctx.drawImage(uploadedLogo, x, y, size, size);
-        }
-
-        container.innerHTML = "";
-        container.appendChild(canvas);
-        document.body.removeChild(tempDiv);
-      }, 300);
+      qrCode.append(container);
     }
 
     function downloadQRCode() {
-      const canvas = document.querySelector("#qrcode canvas");
-      if (!canvas) {
-        alert("Bitte zuerst einen QR-Code generieren.");
-        return;
+      if (qrCode) {
+        qrCode.download({ name: "qrstudio-code", extension: "png" });
       }
-      const link = document.createElement("a");
-      link.download = "qr-code.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
     }
   </script>
 </body>

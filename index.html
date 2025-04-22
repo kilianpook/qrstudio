@@ -17,6 +17,25 @@
       <label class="block font-medium mb-1">QR-Inhalt</label>
       <input id="qr-data" type="text" class="w-full border p-2 rounded" placeholder="https://deine-seite.de" />
     </div>
+    
+    <div>
+      <label class="block font-medium mb-1">QR-Stil</label>
+      <select id="dot-style" class="w-full border p-2 rounded mb-4">
+        <option value="square">🟥 Klassisch (eckig)</option>
+        <option value="dots">🔵 Rund (Premium)</option>
+        <option value="extra-rounded">🟣 Mikro-Dots</option>
+        <option value="classy">🔷 Kacheln / Diamanten</option>
+      </select>
+    </div>
+    
+    <div>
+      <label class="block font-medium mb-1">Augenform (Ecken)</label>
+      <select id="corner-style" class="w-full border p-2 rounded mb-4">
+        <option value="square">🟥 Klassisch (eckig)</option>
+        <option value="dot">🔵 Rund</option>
+        <option value="extra-rounded">🟣 Extra weich</option>
+      </select>
+    </div>
     <div>
       <label class="block font-medium mb-1">QR-Farbe</label>
       <input id="qr-color" type="color" value="#000000" class="w-16 h-10 border rounded" />
@@ -60,14 +79,24 @@
         width: 300,
         height: 300,
         type: "canvas",
+        image: logoImage || "",
+        dotsOptions: {
+          type: document.getElementById("dot-style").value,
+          color: color,
+          type: document.getElementById("dot-style").value
+        },
         data: data,
         image: logoImage || "",
         dotsOptions: {
+          type: document.getElementById("dot-style").value,
           color: color,
           type: "rounded"
         },
         backgroundOptions: {
           color: "#ffffff"
+        },
+        cornersSquareOptions: {
+          type: document.getElementById("corner-style").value
         },
         imageOptions: {
           crossOrigin: "anonymous",

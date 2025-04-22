@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -71,11 +72,13 @@
   </div>
   <footer class="text-center text-sm text-gray-400 mt-12">
     Powered by <span class="font-semibold text-gray-600">QRStudio</span>
+    <br />
+    <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a>
   </footer>
   <script>
     let currentColor = "#000000";
     let uploadedLogo = null;
-  
+
     function setColor(color, el = null) {
       currentColor = color;
       document.querySelectorAll("#color-buttons button").forEach(btn => {
@@ -85,7 +88,7 @@
         el.classList.add("ring-4", "ring-offset-2", "ring-gray-300");
       }
     }
-  
+
     document.getElementById("logo-upload").addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (file) {
@@ -99,7 +102,31 @@
         uploadedLogo = null;
       }
     });
-  
+
+    function formatQRCodeContent(type, value) {
+      const trimmed = value.trim();
+      switch (type) {
+        case 'url':
+        case 'app':
+        case 'pdf':
+          return trimmed;
+        case 'text':
+          return trimmed;
+        case 'tel':
+          return `tel:${trimmed}`;
+        case 'email':
+          return `mailto:${trimmed}`;
+        case 'paypal':
+          return `https://www.paypal.me/${trimmed}`;
+        case 'event':
+          const parts = trimmed.split('|');
+          if (parts.length !== 3) return trimmed;
+          return `BEGIN:VEVENT\nSUMMARY:${parts[0]}\nDTSTART:${parts[1].replace(/[-:]/g, '')}Z\nDTEND:${parts[2].replace(/[-:]/g, '')}Z\nEND:VEVENT`;
+        default:
+          return trimmed;
+      }
+    }
+
     function generateQRCode() {
       const type = document.getElementById("qr-type").value;
       const rawContent = document.getElementById("qr-content").value;
@@ -107,12 +134,6 @@
       const container = document.getElementById("qrcode");
       container.innerHTML = "";
 
-      const canvas = document.createElement("canvas");
-      canvas.width = 200;
-      canvas.height = 200;
-      container.appendChild(canvas);
-      const ctx = canvas.getContext("2d");
-
       const tempDiv = document.createElement("div");
       document.body.appendChild(tempDiv);
       new QRCode(tempDiv, {
@@ -127,6 +148,10 @@
       setTimeout(() => {
         const tempCanvas = tempDiv.querySelector("canvas");
         if (!tempCanvas) return;
+        const canvas = document.createElement("canvas");
+        canvas.width = 200;
+        canvas.height = 200;
+        const ctx = canvas.getContext("2d");
         ctx.drawImage(tempCanvas, 0, 0);
 
         if (uploadedLogo && uploadedLogo.complete) {
@@ -136,68 +161,23 @@
           ctx.drawImage(uploadedLogo, x, y, size, size);
         }
 
+        container.innerHTML = "";
+        container.appendChild(canvas);
         document.body.removeChild(tempDiv);
       }, 300);
     }
-      const content = document.getElementById("qr-content").value;
-      const container = document.getElementById("qrcode");
-      container.innerHTML = "";
-  
-      // Canvas vorbereiten
-      const canvas = document.createElement("canvas");
-      canvas.width = 200;
-      canvas.height = 200;
-      container.appendChild(canvas);
-      const ctx = canvas.getContext("2d");
-  
-      // QR erzeugen mit qrcodejs in separatem div (damit wir ans Canvas kommen)
-      const tempDiv = document.createElement("div");
-      document.body.appendChild(tempDiv);
-      new QRCode(tempDiv, {
-        text: content,
-        width: 200,
-        height: 200,
-        colorDark: currentColor,
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-      });
-  
-      // Canvas aus temp kopieren
-      setTimeout(() => {
-        const tempCanvas = tempDiv.querySelector("canvas");
-        if (!tempCanvas) return;
-        ctx.drawImage(tempCanvas, 0, 0);
-  
-        // Logo (falls vorhanden) drüberlegen
-        if (uploadedLogo && uploadedLogo.complete) {
-          const size = canvas.width * 0.25;
-          const x = (canvas.width - size) / 2;
-          const y = (canvas.height - size) / 2;
-          ctx.drawImage(uploadedLogo, x, y, size, size);
-        }
-  
-        document.body.removeChild(tempDiv); // Aufräumen
-      }, 300);
-    }
-  
+
     function downloadQRCode() {
       const canvas = document.querySelector("#qrcode canvas");
       if (!canvas) {
         alert("Bitte zuerst einen QR-Code generieren.");
         return;
       }
-  
       const link = document.createElement("a");
       link.download = "qr-code.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
     }
-  </script>  
-  <footer style="text-align: center; font-size: 0.9rem; margin-top: 2rem;">
-    <p>
-      <a href="impressum.html">Impressum</a> · 
-      <a href="datenschutz.html">Datenschutz</a>
-    </p>
-  </footer>  
+  </script>
 </body>
 </html>

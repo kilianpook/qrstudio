@@ -12,50 +12,57 @@
   <header class="flex justify-center mb-6">
     <img src="logo.png" alt="QRStudio Logo" class="h-24" />
   </header>
-  <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow space-y-6">
+
+  <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow space-y-6">
     <div>
-      <label class="block font-medium mb-1">QR-Inhalt</label>
-      <input id="qr-data" type="text" class="w-full border p-2 rounded" placeholder="https://deine-seite.de" />
+      <label class="block font-medium mb-1">Inhalt</label>
+      <input id="qr-data" type="text" placeholder="https://deine-seite.de" class="w-full border p-2 rounded" />
     </div>
-    
     <div>
       <label class="block font-medium mb-1">QR-Stil</label>
-      <select id="dot-style" class="w-full border p-2 rounded mb-4">
+      <select id="dot-style" class="w-full border p-2 rounded">
         <option value="square">🟥 Klassisch (eckig)</option>
         <option value="dots">🔵 Rund (Premium)</option>
         <option value="extra-rounded">🟣 Mikro-Dots</option>
         <option value="classy">🔷 Kacheln / Diamanten</option>
       </select>
     </div>
-    
     <div>
-      <label class="block font-medium mb-1">Augenform (Ecken)</label>
-      <select id="corner-style" class="w-full border p-2 rounded mb-4">
-        <option value="square">🟥 Klassisch (eckig)</option>
+      <label class="block font-medium mb-1">Ecken-Stil</label>
+      <select id="corner-style" class="w-full border p-2 rounded">
+        <option value="square">🟥 Klassisch</option>
         <option value="dot">🔵 Rund</option>
         <option value="extra-rounded">🟣 Extra weich</option>
       </select>
     </div>
     <div>
       <label class="block font-medium mb-1">QR-Farbe</label>
-      <input id="qr-color" type="color" value="#000000" class="w-16 h-10 border rounded" />
+      <input id="qr-color" type="color" value="#000000" class="w-20 h-10 border rounded" />
     </div>
     <div>
       <label class="block font-medium mb-1">Logo hochladen</label>
       <input id="logo-upload" type="file" accept="image/*" class="w-full border p-2 rounded" />
     </div>
+
     <div class="text-center">
       <button onclick="generateStyledQRCode()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
         QR-Code erstellen
       </button>
     </div>
+
     <div id="qr-preview" class="flex justify-center items-center bg-gray-100 rounded-lg p-4 min-h-[240px]"></div>
+
     <div class="text-center">
       <button onclick="downloadQR()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
         Download
       </button>
     </div>
   </div>
+
+  <footer class="text-center text-sm text-gray-400 mt-12">
+    Powered by <span class="font-semibold text-gray-600">QRStudio</span><br />
+    <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a>
+  </footer>
 
   <script>
     let qrCode = null;
@@ -74,29 +81,24 @@
     function generateStyledQRCode() {
       const data = document.getElementById("qr-data").value;
       const color = document.getElementById("qr-color").value;
+      const dotType = document.getElementById("dot-style").value;
+      const cornerType = document.getElementById("corner-style").value;
 
       qrCode = new QRCodeStyling({
         width: 300,
         height: 300,
         type: "canvas",
-        image: logoImage || "",
-        dotsOptions: {
-          type: document.getElementById("dot-style").value,
-          color: color,
-          type: document.getElementById("dot-style").value
-        },
         data: data,
         image: logoImage || "",
         dotsOptions: {
-          type: document.getElementById("dot-style").value,
           color: color,
-          type: "rounded"
+          type: dotType
+        },
+        cornersSquareOptions: {
+          type: cornerType
         },
         backgroundOptions: {
           color: "#ffffff"
-        },
-        cornersSquareOptions: {
-          type: document.getElementById("corner-style").value
         },
         imageOptions: {
           crossOrigin: "anonymous",

@@ -101,6 +101,44 @@
     });
   
     function generateQRCode() {
+      const type = document.getElementById("qr-type").value;
+      const rawContent = document.getElementById("qr-content").value;
+      const content = formatQRCodeContent(type, rawContent);
+      const container = document.getElementById("qrcode");
+      container.innerHTML = "";
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 200;
+      canvas.height = 200;
+      container.appendChild(canvas);
+      const ctx = canvas.getContext("2d");
+
+      const tempDiv = document.createElement("div");
+      document.body.appendChild(tempDiv);
+      new QRCode(tempDiv, {
+        text: content,
+        width: 200,
+        height: 200,
+        colorDark: currentColor,
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      setTimeout(() => {
+        const tempCanvas = tempDiv.querySelector("canvas");
+        if (!tempCanvas) return;
+        ctx.drawImage(tempCanvas, 0, 0);
+
+        if (uploadedLogo && uploadedLogo.complete) {
+          const size = canvas.width * 0.25;
+          const x = (canvas.width - size) / 2;
+          const y = (canvas.height - size) / 2;
+          ctx.drawImage(uploadedLogo, x, y, size, size);
+        }
+
+        document.body.removeChild(tempDiv);
+      }, 300);
+    }
       const content = document.getElementById("qr-content").value;
       const container = document.getElementById("qrcode");
       container.innerHTML = "";
@@ -155,5 +193,11 @@
       link.click();
     }
   </script>  
+  <footer style="text-align: center; font-size: 0.9rem; margin-top: 2rem;">
+    <p>
+      <a href="impressum.html">Impressum</a> · 
+      <a href="datenschutz.html">Datenschutz</a>
+    </p>
+  </footer>  
 </body>
 </html>

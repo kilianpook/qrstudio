@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QRStudio Style Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 p-6">
+  <div class="max-w-4xl mx-auto space-y-10">
+    <header class="flex justify-between items-center border-b pb-4">
+      <h1 class="text-3xl font-bold">QRStudio – Style Guide</h1>
+      <select id="lang-switch" class="border p-1 rounded text-sm">
+        <option value="de">Deutsch</option>
+        <option value="en" selected>English</option>
+      </select>
+    </header>
+
+    <section id="logo" class="space-y-2">
+      <h2 class="text-2xl font-semibold">Logo</h2>
+      <p class="text-gray-600">The logo should be placed clearly, either centered or top left, and should stand on light backgrounds.</p>
+      <img src="logo.png" alt="QRStudio Logo" class="w-40 mt-2" />
+    </section>
+
+    <section id="colors" class="space-y-2">
+      <h2 class="text-2xl font-semibold">Colors</h2>
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-4">
+        <div class="text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-black"></div>
+          <p class="text-xs mt-1">#000000</p>
+        </div>
+        <div class="text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-blue-600"></div>
+          <p class="text-xs mt-1">#2563EB</p>
+        </div>
+        <div class="text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-red-500"></div>
+          <p class="text-xs mt-1">#EF4444</p>
+        </div>
+        <div class="text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-green-500"></div>
+          <p class="text-xs mt-1">#22C55E</p>
+        </div>
+        <div class="text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-yellow-400"></div>
+          <p class="text-xs mt-1">#FACC15</p>
+        </div>
+        <div class="text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-purple-500"></div>
+          <p class="text-xs mt-1">#A855F7</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="typography" class="space-y-2">
+      <h2 class="text-2xl font-semibold">Typography</h2>
+      <p class="text-gray-600">Default font: <strong>Tailwind Default (inter)</strong></p>
+      <p class="text-lg">Example text: Creating QR codes has never been easier.</p>
+    </section>
+
+    <section id="branding" class="space-y-2">
+      <h2 class="text-2xl font-semibold">Branding Integration</h2>
+      <p class="text-gray-600">Recommended: subtle “powered by QRStudio” in the footer.</p>
+      <footer class="text-center text-sm text-gray-400 mt-4">powered by <span class="font-semibold text-gray-600">QRStudio</span></footer>
+    </section>
+  </div>
+
+  <script>
+    const switcher = document.getElementById("lang-switch");
+    switcher.addEventListener("change", () => {
+      location.href = switcher.value === "de" ? "styleguide.html" : "styleguide-en.html";
+    });
+  </script>
+</body>
+</html>

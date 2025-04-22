@@ -38,6 +38,8 @@
         <div>
           <label class="block text-sm font-medium mb-1">Inhalt</label>
           <input id="qr-content" type="text" placeholder="z. B. https://deine-seite.de" class="w-full p-2 border rounded" />
+        <p id="hint" class="text-xs text-gray-500 mt-2">💡 Der Hinweis erscheint automatisch je nach Inhaltstyp.</p>
+
         </div>
       </div>
     </div>
@@ -166,6 +168,26 @@
         document.body.removeChild(tempDiv);
       }, 300);
     }
+
+    
+    document.getElementById("qr-type").addEventListener("change", function () {
+      const hint = document.getElementById("hint");
+      const type = this.value;
+      switch (type) {
+        case 'text':
+          hint.textContent = "💬 Hinweis: Manche QR-Scanner suchen den Text im Internet anstatt ihn nur anzuzeigen.";
+          break;
+        case 'app':
+          hint.textContent = "📱 Bitte vollständigen App-Store-Link einfügen (z. B. https://...).";
+          break;
+        case 'event':
+          hint.textContent = "📅 Einige Kalender-Apps unterstützen Event-QR-Codes – bitte genaues Format verwenden.";
+          break;
+        default:
+          hint.textContent = "";
+      }
+    });
+
 
     function downloadQRCode() {
       const canvas = document.querySelector("#qrcode canvas");

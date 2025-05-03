@@ -8,6 +8,14 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.js"></script>
+
+<style>
+.pro-feature {
+  color: #999;
+  font-style: italic;
+}
+</style>
+
 </head>
 <body class="bg-gray-100 text-gray-800 p-6">
   <header class="flex justify-center mt-1 mb-6">
@@ -40,56 +48,110 @@
       </div>
     </div>
 
-    <!-- Box 2 -->
-    <div class="bg-white rounded-2xl shadow p-6">
-      <h2 class="text-xl font-semibold mb-4">2. Stil wählen</h2>
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Farbe wählen</label>
-        <div id="color-buttons" class="flex flex-wrap gap-2 mb-2">
-          <button type="button" class="w-8 h-8 rounded-full bg-black" onclick="setColor('#000000', this)"></button>
-          <button type="button" class="w-8 h-8 rounded-full bg-blue-600" onclick="setColor('#2563eb', this)"></button>
-          <button type="button" class="w-8 h-8 rounded-full bg-red-500" onclick="setColor('#ef4444', this)"></button>
-          <button type="button" class="w-8 h-8 rounded-full bg-green-500" onclick="setColor('#22c55e', this)"></button>
-          <button type="button" class="w-8 h-8 rounded-full bg-yellow-400" onclick="setColor('#facc15', this)"></button>
-          <button type="button" class="w-8 h-8 rounded-full bg-purple-500" onclick="setColor('#a855f7', this)"></button>
-        </div>
-        <input type="color" id="custom-color" onchange="setColor(this.value)" class="w-12 h-8 p-0 border rounded" />
-      </div>
-      <div class="mt-4">
-        <label class="block text-sm font-medium mb-1">QR-Stil (Punkte)</label>
-        <select id="dot-style" class="w-full border rounded p-2">
-          <option value="square">🟥 Klassisch (eckig)</option>
-          <option value="dots">🔵 Rund</option>
-          <option value="extra-rounded">🟣 Mikro-Dots</option>
-          <option value="classy">🔷 Kacheln / Diamanten</option>
-        </select>
-      </div>
-      <div class="mt-4">
-        <label class="block text-sm font-medium mb-1">Augenform (Ecken)</label>
-        <select id="corner-style" class="w-full border rounded p-2">
-          <option value="square">🟥 Klassisch</option>
-          <option value="dot">🔵 Rund</option>
-          <option value="extra-rounded">🟣 Extra weich</option>
-        </select>
-      </div>
-      <div class="mt-4">
-        <label class="block text-sm font-medium mb-1">Logo hochladen</label>
-        <input id="logo-upload" type="file" class="w-full border p-2 rounded" accept="image/*" />
-        <p class="text-xs text-gray-500 mt-1">Dein Logo wird automatisch in der Mitte des QR-Codes eingefügt</p>
-      </div>
-    </div>
+<!-- Box 2 -->
+<div class="bg-white rounded-2xl shadow p-6">
+  <h2 class="text-xl font-semibold mb-4">2. Stil wählen</h2>
 
-    <!-- Box 3 -->
-    <div class="bg-white rounded-2xl shadow p-6 text-center">
-      <h2 class="text-xl font-semibold mb-4">3. QR-Code Vorschau</h2>
-      <div id="qrcode" class="flex justify-center items-center p-4 bg-gray-200 rounded-lg mb-4"></div>
-      <div class="flex justify-center gap-4">
-        <button onclick="generateQRCode()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">QR-Code erstellen</button>
-        <button onclick="downloadQRCode()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Download</button>
-      </div>
+  <!-- Farbe wählen -->
+  <div class="mb-4">
+    <label class="block text-sm font-medium mb-1">Farbe wählen</label>
+    <div id="color-buttons" class="flex flex-wrap gap-2 mb-2">
+      <button type="button" class="w-8 h-8 rounded-full bg-black" onclick="setColor('#000000', this)"></button>
+      <button type="button" class="w-8 h-8 rounded-full bg-blue-600" onclick="setColor('#2563eb', this)"></button>
+      <button type="button" class="w-8 h-8 rounded-full bg-red-500" onclick="setColor('#ef4444', this)"></button>
+      <button type="button" class="w-8 h-8 rounded-full bg-green-500" onclick="setColor('#22c55e', this)"></button>
+      <button type="button" class="w-8 h-8 rounded-full bg-yellow-400" onclick="setColor('#facc15', this)"></button>
+      <button type="button" class="w-8 h-8 rounded-full bg-purple-500" onclick="setColor('#a855f7', this)"></button>
+    </div>
+    <input type="color" id="custom-color" onchange="setColor(this.value)" class="w-12 h-8 p-0 border rounded" />
+  </div>
+
+  <!-- QR-Stil -->
+  <div class="mt-4">
+    <label class="block text-sm font-medium mb-1">QR-Stil (Punkte)</label>
+    <select id="dot-style" onchange="checkProFeature(this)" class="w-full border rounded p-2">
+      <option value="square">🟥 Klassisch (eckig)</option>
+      <option value="dots" class="pro-feature">🔵 Rund (Pro)</option>
+      <option value="micro" class="pro-feature">🟣 Mikro-Dots (Pro)</option>
+      <option value="diamond" class="pro-feature">🟪 Kacheln / Diamanten (Pro)</option>
+    </select>
+  </div>
+
+  <!-- Augenform -->
+  <div class="mt-4">
+    <label class="block text-sm font-medium mb-1">Augenform (Ecken)</label>
+    <select id="corner-style" class="w-full border rounded p-2">
+      <option value="square">🟥 Klassisch</option>
+      <option value="dot">🔵 Rund</option>
+      <option value="extra-rounded">🟣 Extra weich</option>
+    </select>
+  </div>
+
+  <!-- Logo hochladen -->
+  <div class="mt-4">
+    <label class="block text-sm font-medium mb-1">Logo hochladen</label>
+    <input id="logo-upload" type="file" class="w-full border p-2 rounded" accept="image/*" />
+    <p class="text-xs text-gray-500 mt-1">Dein Logo wird automatisch in der Mitte des QR-Codes eingefügt</p>
+  </div>
+</div>
+
+<!-- Box 3 -->
+<div class="bg-white rounded-2xl shadow p-6 mt-6 text-center">
+  <h2 class="text-xl font-semibold mb-4">3. QR-Code Vorschau</h2>
+  <div id="qrcode" class="flex justify-center items-center p-4 bg-gray-200 rounded-lg mb-4"></div>
+  <div class="flex justify-center gap-4">
+    <button onclick="generateQRCode()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+      QR-Code erstellen
+    </button>
+    <button onclick="downloadQRCode()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+      Download
+    </button>
+  </div>
+</div>
+
+<!-- Box 4 – Upgrade -->
+<section class="bg-white p-6 rounded-xl shadow-md max-w-xl mx-auto mt-10 text-gray-800">
+  <h2 class="text-2xl font-semibold mb-4 text-center">QRStudio Pro – Upgrade</h2>
+  <p class="mb-4 text-center text-sm text-gray-600">Wähle deine Bezahlmethode:</p>
+
+  <div class="grid gap-6">
+<!-- Stripe -->
+<div class="border p-4 rounded-xl">
+  <h3 class="font-semibold mb-2 text-center">Zahlung per Karte, Apple Pay, Google Pay</h3>
+
+  <!-- Stripe Monatsabo -->
+  <a href="https://buy.stripe.com/test_28o9CC9ic8Qecr6aEF" target="_blank"
+     class="block bg-indigo-600 hover:bg-indigo-700 text-white text-center font-semibold py-2 px-4 rounded-xl">
+     Stripe: 1,99 €/Monat (Demo)
+  </a>
+
+  <!-- Stripe Einmalzahlung -->
+  <a href="https://buy.stripe.com/test_6oE1661PKeay4YE6oo" target="_blank"
+     class="block mt-2 bg-green-600 hover:bg-green-700 text-white text-center font-semibold py-2 px-4 rounded-xl">
+     Stripe: einmalig 9,99 € (Demo)
+  </a>
+</div>
+
+
+    <!-- PayPal -->
+    <div class="border p-4 rounded-xl">
+      <h3 class="font-semibold mb-2 text-center">Zahlung mit PayPal</h3>
+      <a href="https://www.paypal.com/ncp/payment/2C527UFXDZ4VQ" target="_blank"
+      class="block mt-2 bg-yellow-500 hover:bg-yellow-600 text-white text-center font-semibold py-2 px-4 rounded-xl w-full">
+      PayPal: einmalig 9,99 €
+   </a>   
+      <button class="block mt-2 bg-yellow-500 hover:bg-yellow-600 text-white text-center font-semibold py-2 px-4 rounded-xl w-full">
+        PayPal: einmalig 9,99 € (in Vorbereitung)
+      </button>
     </div>
   </div>
 
+  <p class="text-center text-sm text-gray-400 mt-4">
+    Testmodus – keine echte Zahlung. Aktivierung erst bei Launch.
+  </p>
+</section>
+
+  
   <footer class="text-center text-sm text-gray-400 mt-12">
     Powered by <span class="font-semibold text-gray-600">QRStudio</span><br />
     <a href="impressum.html" class="text-gray-500 hover:text-gray-700">Impressum</a> &middot;
@@ -207,5 +269,69 @@
       }
     }
   </script>
+
+<!-- Pro-Upgrade Modal -->
+<div id="upgradeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl shadow-2xl px-6 py-8 w-[90%] max-w-sm text-center">
+    <div class="flex justify-center items-center mb-4">
+      <span class="text-orange-500 text-xl mr-2">🔒</span>
+      <h2 class="text-xl font-bold text-gray-900">QRStudio Pro</h2>
+    </div>
+    <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+      Du hast ein exklusives Pro-Feature ausgewählt.<br>
+      Mit QRStudio Pro erhältst du Zugriff auf:
+    </p>
+    <ul class="text-left text-sm text-gray-800 list-disc list-inside mb-4 space-y-1">
+      <li>Premium-QR-Stile (Rund, Dots, Diamant...)</li>
+      <li>Export ohne Wasserzeichen</li>
+      <li>Mehr Farben & Logo-Rahmen</li>
+    </ul>
+    <p class="text-green-600 font-bold text-lg mb-6">Einmalig nur 9,99 €</p>
+    <button onclick="window.location.href='https://buy.stripe.com/test_6oE1661PKeay4YE6oo'"
+      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-3 rounded-xl w-full mb-3 transition">
+      ➕ Jetzt upgraden für 9,99 € <span class="text-xs font-normal">(Demo)</span>
+    </button>
+    <button onclick="closeUpgradeModal()" class="text-sm text-gray-500 underline hover:text-gray-700">
+      Später erinnern
+    </button>
+  </div>
+</div>
+
+
+<script>
+  function showUpgradeModal() {
+    document.getElementById("upgradeModal").classList.remove("hidden");
+  }
+
+  function closeUpgradeModal() {
+    document.getElementById("upgradeModal").classList.add("hidden");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const dropdown = document.getElementById("dot-style");
+    dropdown.addEventListener("change", function () {
+      const selected = dropdown.options[dropdown.selectedIndex];
+      if (selected.classList.contains("pro-feature")) {
+        dropdown.selectedIndex = 0;
+        showUpgradeModal();
+      }
+    });
+  });
+</script>
+
+
+<script>
+  function checkProFeature(selectElement) {
+    const proValues = ['dots', 'micro', 'diamond'];
+    if (proValues.includes(selectElement.value)) {
+      if (typeof showUpgradeModal === 'function') {
+        showUpgradeModal(); // zeigt das Pro-Modal an
+      } else {
+        alert('Pro-Funktion 🔒 Upgrade erforderlich!');
+      }
+      selectElement.value = 'square'; // zurücksetzen auf Free-Version
+    }
+  }
+</script>
 </body>
 </html>

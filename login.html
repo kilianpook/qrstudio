@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QRStudio Login</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .login-container {
+      background: #fff;
+      padding: 2.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    .logo {
+      width: 60px;
+      margin-bottom: 1rem;
+    }
+    .title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      font-size: 1.3rem;
+      color: #3b82f6;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background-color: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    .note {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="logo.png" alt="QRStudio Logo" class="logo" />
+    <div class="title">QR<span style="color:#3b82f6;">Studio</span></div>
+    <div class="subtitle">Login</div>
+    <input type="email" id="email" placeholder="E-Mail-Adresse eingeben" />
+    <button id="loginBtn">Weiter</button>
+    <div class="note" id="message"></div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+    const supabase = createClient(
+      'https://fjokxfxsmveskzqmfhcu.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqb2t4ZnhzbXZlc2t6cW1maGN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzczMjgsImV4cCI6MjA2MjY1MzMyOH0.FEqXvVbfkSzKujN6FPDdQRAyr-dqhpYT-RMiDPj1dUc'
+    );
+
+    const redirectBase = location.hostname === "localhost"
+      ? "http://localhost:5500"
+      : "https://qrstudio.de";
+
+    async function sendMagicLink() {
+      const email = document.getElementById('email').value;
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${redirectBase}/index.html`
+        }
+      });
+
+      document.getElementById('message').textContent = error
+        ? error.message
+        : 'Magic Link wurde gesendet!';
+
+      if (!error) window.location.href = 'login-sent.html';
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', sendMagicLink);
+  </script>
+</body>
+</html>

@@ -15,7 +15,12 @@
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 p-6">
-  <header class="flex justify-center mt-1 mb-6">
+  <header class="flex justify-center mt-1 mb-6 relative">
+<div id="statusBox" class="absolute top-4 right-6 text-sm text-gray-700 space-x-4 hidden">
+  <span id="statusBadge" class="px-3 py-1 rounded-full font-semibold bg-gray-200">Status: Free</span>
+  <button onclick="logout()" class="underline text-blue-600 hover:text-blue-800">Logout</button>
+</div>
+
     <img class="w-auto h-[100px]" src="logo.png" alt="QRStudio Logo"/>
   </header>
   <div class="max-w-3xl mx-auto space-y-8">
@@ -124,6 +129,9 @@
           <a href="https://www.paypal.com/ncp/payment/2C527UFXDZ4VQ" target="_blank" class="block w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-white text-center font-semibold py-2 px-4 rounded-xl">PayPal: einmalig 9,99 €</a>
         </div>
       </div>
+      <p class="text-center text-sm text-gray-500 mt-4">
+       Schon Pro-Nutzer? <a href="login.html" class="underline hover:text-gray-800">Jetzt einloggen</a>
+     </p>
     </section>
   </div>
 
@@ -135,10 +143,78 @@
     <a href="widerruf.html" class="text-gray-500 hover:text-gray-700">Widerruf</a> ·
     <a href="styleguide.html" class="text-gray-500 hover:text-gray-700">Styleguide</a>
   </footer>
+<!-- Modul-Skript für Supabase-Auth -->
 
-  <!-- Skript am Ende -->
+  
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+  const supabase = createClient(
+    'https://fjokxfxsmveskzqmfhcu.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqb2t4ZnhzbXZlc2t6cW1maGN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzczMjgsImV4cCI6MjA2MjY1MzMyOH0.FEqXvVbfkSzKujN6FPDdQRAyr-dqhpYT-RMiDPj1dUc'
+  );
+
+  // Prüft beim Seitenstart, ob ein aktiver Login besteht und lädt Pro-Status
+  async function syncProStatus() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      localStorage.setItem('pro', 'false');
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('pro')
+      .eq('id', session.user.id)
+      .single();
+
+    if (!error && data?.pro === true) {
+      localStorage.setItem('pro', 'true');
+    } else {
+      localStorage.setItem('pro', 'false');
+    }
+  }
+
+  // Bei Statusänderung (z. B. Magic-Link geöffnet) synchronisieren
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN') {
+      syncProStatus();
+    }
+  });
+
+  // Initiale Prüfung beim Laden
+  await syncProStatus();
+</script>
+
+<!-- Skript am Ende -->
   <script>
     // Pro-Flag aus URL auslesen
+
+const badge = document.getElementById('statusBadge');
+const box = document.getElementById('statusBox');
+const isPro = localStorage.getItem('pro') === 'true';
+const isLoggedIn = localStorage.getItem('pro') !== null;
+
+if (isLoggedIn) {
+  box.classList.remove('hidden');
+  if (isPro) {
+    badge.textContent = 'Status: Pro';
+    badge.classList.remove('bg-gray-200');
+    badge.classList.add('bg-green-200', 'text-green-800');
+  } else {
+    badge.textContent = 'Status: Free';
+    badge.classList.remove('bg-green-200', 'text-green-800');
+    badge.classList.add('bg-gray-200');
+  }
+} else {
+  box.classList.add('hidden');
+}
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const proVersionActive = urlParams.get('pro') === 'true';
 
@@ -250,6 +326,9 @@
       <button onclick="window.location.href='https://buy.stripe.com/bIYeXv7iU8012vC7ss'" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-3 rounded-xl w-full mb-3 transition">
         ➕ Jetzt upgraden für 9,99 €
       </button>
+      <p class="text-sm text-gray-500 mt-4">
+       Schon Pro-Nutzer? <a href="login.html" class="underline hover:text-gray-800">Hier einloggen</a>
+      </p>
       <button onclick="closeUpgradeModal()" class="text-sm text-gray-500 underline hover:text-gray-700">Später erinnern</button>
     </div>
   </div>

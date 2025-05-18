@@ -80,36 +80,37 @@
     <div class="note" id="message"></div>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
-    const supabase = createClient(
-      'https://fjokxfxsmveskzqmfhcu.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqb2t4ZnhzbXZlc2t6cW1maGN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzczMjgsImV4cCI6MjA2MjY1MzMyOH0.FEqXvVbfkSzKujN6FPDdQRAyr-dqhpYT-RMiDPj1dUc'
-    );
+  const supabase = createClient(
+    'https://fjokxfxsmveskzqmfhcu.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqb2t4ZnhzbXZlc2t6cW1maGN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNzczMjgsImV4cCI6MjA2MjY1MzMyOH0.FEqXvVbfkSzKujN6FPDdQRAyr-dqhpYT-RMiDPj1dUc'
+  );
 
-    const redirectBase = location.hostname === "localhost"
-      ? "http://localhost:5500"
-      : "https://qrstudio.de";
+  // 👇 korrektes Redirect-Ziel: GitHub Pages
+  const redirectBase = location.hostname === "localhost"
+    ? "http://localhost:5500"
+    : "https://kilianpook.github.io/qrstudio";
 
-    async function sendMagicLink() {
-      const email = document.getElementById('email').value;
+  async function sendMagicLink() {
+    const email = document.getElementById('email').value;
 
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${redirectBase}/index.html`
-        }
-      });
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${redirectBase}/index.html`
+      }
+    });
 
-      document.getElementById('message').textContent = error
-        ? error.message
-        : 'Magic Link wurde gesendet!';
+    document.getElementById('message').textContent = error
+      ? error.message
+      : 'Magic Link wurde gesendet!';
 
-      if (!error) window.location.href = 'login-sent.html';
-    }
+    if (!error) window.location.href = 'login-sent.html';
+  }
 
-    document.getElementById('loginBtn').addEventListener('click', sendMagicLink);
-  </script>
+  document.getElementById('loginBtn').addEventListener('click', sendMagicLink);
+</script>
 </body>
 </html>

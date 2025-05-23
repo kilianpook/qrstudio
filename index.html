@@ -12,6 +12,17 @@
     .frame-thin canvas { box-shadow: 0 0 0 2px #333 inset; }
     .frame-thick canvas { box-shadow: 0 0 0 8px #333 inset; }
     .frame-rounded canvas { box-shadow: 0 0 0 6px #333 inset; border-radius: 16px; }
+
+    @media (max-width: 640px) {
+      #statusBox {
+        position: static;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+    }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 p-6">

@@ -281,7 +281,37 @@
 
 <!-- Skript am Ende -->
   <script>
-    // Pro-Flag aus URL auslesen
+    
+function drawFrame(ctx, w, h, style) {
+  ctx.save();
+  ctx.strokeStyle = currentColor; // testweise grün
+  if (style === "thin") {
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, 0, w, h);
+  } else if (style === "thick") {
+    ctx.lineWidth = 8;
+    ctx.strokeRect(0, 0, w, h);
+  } else if (style === "rounded") {
+    ctx.lineWidth = 6;
+    const r = 16;
+    ctx.beginPath();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(w - r, 0);
+    ctx.quadraticCurveTo(w, 0, w, r);
+    ctx.lineTo(w, h - r);
+    ctx.quadraticCurveTo(w, h, w - r, h);
+    ctx.lineTo(r, h);
+    ctx.quadraticCurveTo(0, h, 0, h - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+
+// Pro-Flag aus URL auslesen
 
 const badge = document.getElementById('statusBadge');
 const box = document.getElementById('statusBox');
@@ -371,14 +401,20 @@ if (isLoggedIn) {
         backgroundOptions: { color: '#ffffff' },
         imageOptions: { crossOrigin: 'anonymous', margin:6, imageSize:0.4 }
       });
-      qrCode.append(container).then(() => {
-        const cv = container.querySelector('canvas');
-        setTimeout(() => { if(!proVersionActive) drawWatermark(cv.getContext('2d'), cv.width, cv.height); }, 500);
-        if(proVersionActive && frame!=='none') {
-          container.classList.remove('frame-thin','frame-thick','frame-rounded');
-          container.classList.add(`frame-${frame}`);
-        }
-      });
+      qrCode.append(container);
+  setTimeout(() => {
+    const cv = container.querySelector('canvas');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    if (!proVersionActive) {
+      drawWatermark(ctx, cv.width, cv.height);
+    } else {
+      const frame = document.getElementById('frame-style').value;
+      if (frame !== 'none') {
+        drawFrame(ctx, cv.width, cv.height, frame);
+      }
+    }
+  }, 300);
     }
 
     function downloadQRCode() {
